@@ -1,150 +1,257 @@
 package MiniProject;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello...");
-        System.out.println("You are a teacher or a student? ");
-        System.out.println("if you are a teacher please enter 1 else enter 2");
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-        scanner.nextLine();
-        if (input == 1) {
-        while (true) {
-                Course course;
-                Assignment assignment;
-                Student student;
-                Teacher teacher = teacherMethod(scanner);
-                System.out.println("What do you wanna do?\nPlease enter the task's number");
-                System.out.println("1.addCourse\n2.removeCourse\n3.defineAssignment\n4.addStudent\n5.removeStudent\n6.deleteAssignment\n7.assignGrade");
-                System.out.println("if you want to exit the program please enter stop");
-                String input1 = scanner.nextLine();
-                if (input1.equals("stop")) {
-                    break;
-                }
-                switch (input1) {
-                    case "1":
-                        course = courseMethod(teacher, scanner);
-                        teacher.addCourse(course);
-                        break;
-                    case "2":
-                        course = courseMethod(teacher, scanner);
-                        teacher.removeCourse(course);
-                        break;
-                    case "3":
-                        course = courseMethod(teacher, scanner);
-                        assignment = assignmentMethod(scanner);
-                        teacher.defineAssignment(course, assignment);
-                        break;
-                    case "4":
-                        course = courseMethod(teacher, scanner);
-                        student = studentMethod(scanner);
-                        teacher.addStudent(course, student);
-                        break;
-                    case "5":
-                        course = courseMethod(teacher, scanner);
-                        student = studentMethod(scanner);
-                        teacher.removeStudent(course, student);
-                        break;
-                    case "6":
-                        course = courseMethod(teacher, scanner);
-                        assignment = assignmentMethod(scanner);
-                        teacher.deleteAssignment(course, assignment);
-                        break;
-                    case "7":
-                        course = courseMethod(teacher, scanner);
-                        assignment = assignmentMethod(scanner);
-                        student = studentMethod(scanner);
-                        System.out.println("Please enter student's grade");
-                        double grade = scanner.nextDouble();
-                        teacher.assignGrade(course, student, grade);
-                        break;
-                    default:
-                        System.out.println("Your request is not on the list");
-                        break;
-                }
-            }
-        }
-        else if (input == 2) {
-            while (true) {
-                Course course;
-                Assignment assignment;
-                Teacher teacher;
-                Student student = studentMethod(scanner);
-                System.out.println("What do you wanna do?\nPlease enter the task's number");
-                System.out.println("1.addCourse\n2.removeCourse\n3.getTotalUnits\n4.getOverallGPA\n5.getCurrentTermGPA\n6.getGradeForTheCourse\n7.printEnrolledCourses");
-                System.out.println("if you want to exit the program please enter stop");
-                String input1 = scanner.nextLine();
-                if (input1.equals("stop")) {
-                    break;
-                }
-                switch (input1) {
-                    case "1" :
-                        teacher = teacherMethod(scanner);
-                        course = courseMethod(teacher, scanner);
-                        student.addCourse(course);
-                        break;
-                    case "2" :
-                        teacher = teacherMethod(scanner);
-                        course = courseMethod(teacher, scanner);
-                        student.removeCourse(course);
-                        break;
-                    case "3" :
-                        System.out.println(student.getTotalUnits());
-                        break;
-                    case "4" :
-                        System.out.println(student.getOverallGPA());
-                         break;
-                    case "5" :
-                        System.out.println(student.getCurrentTermGPA());
-                        break;
-                    case "6" :
-                        teacher = teacherMethod(scanner);
-                        course = courseMethod(teacher, scanner);
-                        System.out.println(student.getGradeForTheCourse(course));
-                        break;
-                    case "7" :
-                        student.printEnrolledCourses();
-                        break;
-                    default:
-                        System.out.println("Your request is not on the list");
-                        break;
 
-                }
+    private static JFrame frame;
+    private static JPanel panel;
+    private static CardLayout cardLayout;
+    private static Teacher currentTeacher;
+    private static Student currentStudent;
+
+    public static void main(String[] args) {
+        frame = new JFrame("Mini Project");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+
+        cardLayout = new CardLayout();
+        panel = new JPanel(cardLayout);
+
+        // Initial screen
+        JPanel initialPanel = new JPanel();
+        initialPanel.setLayout(new GridLayout(4, 1));
+        JLabel welcomeLabel = new JLabel("Hello...");
+        initialPanel.add(welcomeLabel);
+        JLabel questionLabel = new JLabel("Are you a teacher or a student?");
+        initialPanel.add(questionLabel);
+        JButton teacherButton = new JButton("Teacher");
+        JButton studentButton = new JButton("Student");
+        initialPanel.add(teacherButton);
+        initialPanel.add(studentButton);
+
+        panel.add(initialPanel, "initial");
+
+        // Teacher Panel
+        JPanel teacherPanel = new JPanel();
+        teacherPanel.setLayout(new GridLayout(8, 1));
+        JButton addCourseButton = new JButton("Add Course");
+        JButton removeCourseButton = new JButton("Remove Course");
+        JButton defineAssignmentButton = new JButton("Define Assignment");
+        JButton addStudentButton = new JButton("Add Student");
+        JButton removeStudentButton = new JButton("Remove Student");
+        JButton deleteAssignmentButton = new JButton("Delete Assignment");
+        JButton assignGradeButton = new JButton("Assign Grade");
+        JButton backButton1 = new JButton("Back");
+
+        teacherPanel.add(addCourseButton);
+        teacherPanel.add(removeCourseButton);
+        teacherPanel.add(defineAssignmentButton);
+        teacherPanel.add(addStudentButton);
+        teacherPanel.add(removeStudentButton);
+        teacherPanel.add(deleteAssignmentButton);
+        teacherPanel.add(assignGradeButton);
+        teacherPanel.add(backButton1);
+
+        panel.add(teacherPanel, "teacher");
+
+        // Student Panel
+        JPanel studentPanel = new JPanel();
+        studentPanel.setLayout(new GridLayout(8, 1));
+        JButton studentAddCourseButton = new JButton("Add Course");
+        JButton studentRemoveCourseButton = new JButton("Remove Course");
+        JButton getTotalUnitsButton = new JButton("Get Total Units");
+        JButton getOverallGPAButton = new JButton("Get Overall GPA");
+        JButton getCurrentTermGPAButton = new JButton("Get Current Term GPA");
+        JButton getGradeForCourseButton = new JButton("Get Grade for Course");
+        JButton printEnrolledCoursesButton = new JButton("Print Enrolled Courses");
+        JButton backButton2 = new JButton("Back");
+
+        studentPanel.add(studentAddCourseButton);
+        studentPanel.add(studentRemoveCourseButton);
+        studentPanel.add(getTotalUnitsButton);
+        studentPanel.add(getOverallGPAButton);
+        studentPanel.add(getCurrentTermGPAButton);
+        studentPanel.add(getGradeForCourseButton);
+        studentPanel.add(printEnrolledCoursesButton);
+        studentPanel.add(backButton2);
+
+        panel.add(studentPanel, "student");
+
+        // Action Listeners
+        teacherButton.addActionListener(e -> {
+            currentTeacher = teacherMethod();
+            cardLayout.show(panel, "teacher");
+        });
+        studentButton.addActionListener(e -> {
+            currentStudent = studentMethod();
+            cardLayout.show(panel, "student");
+        });
+        backButton1.addActionListener(e -> cardLayout.show(panel, "initial"));
+        backButton2.addActionListener(e -> cardLayout.show(panel, "initial"));
+
+        addCourseButton.addActionListener(e -> handleTeacherAction("addCourse"));
+        removeCourseButton.addActionListener(e -> handleTeacherAction("removeCourse"));
+        defineAssignmentButton.addActionListener(e -> handleTeacherAction("defineAssignment"));
+        addStudentButton.addActionListener(e -> handleTeacherAction("addStudent"));
+        removeStudentButton.addActionListener(e -> handleTeacherAction("removeStudent"));
+        deleteAssignmentButton.addActionListener(e -> handleTeacherAction("deleteAssignment"));
+        assignGradeButton.addActionListener(e -> handleTeacherAction("assignGrade"));
+
+        studentAddCourseButton.addActionListener(e -> handleStudentAction("addCourse"));
+        studentRemoveCourseButton.addActionListener(e -> handleStudentAction("removeCourse"));
+        getTotalUnitsButton.addActionListener(e -> handleStudentAction("getTotalUnits"));
+        getOverallGPAButton.addActionListener(e -> handleStudentAction("getOverallGPA"));
+        getCurrentTermGPAButton.addActionListener(e -> handleStudentAction("getCurrentTermGPA"));
+        getGradeForCourseButton.addActionListener(e -> handleStudentAction("getGradeForTheCourse"));
+        printEnrolledCoursesButton.addActionListener(e -> handleStudentAction("printEnrolledCourses"));
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    private static void handleTeacherAction(String action) {
+        try {
+            switch (action) {
+                case "addCourse":
+                    Course newCourse = courseMethod(currentTeacher);
+                    currentTeacher.addCourse(newCourse);
+                    JOptionPane.showMessageDialog(frame, "The course is added successfully");
+                    break;
+                case "removeCourse":
+                    Course removeCourse = courseMethod(currentTeacher);
+                    currentTeacher.removeCourse(removeCourse);
+                    JOptionPane.showMessageDialog(frame, "The course is removed successfully");
+                    break;
+                case "defineAssignment":
+                    Course assignmentCourse = courseMethod(currentTeacher);
+                    Assignment newAssignment = assignmentMethod();
+                    currentTeacher.defineAssignment(assignmentCourse, newAssignment);
+                    JOptionPane.showMessageDialog(frame, "The assignment is defined successfully");
+                    break;
+                case "addStudent":
+                    Course addStudentCourse = courseMethod(currentTeacher);
+                    Student newStudent = studentMethod();
+                    currentTeacher.addStudent(addStudentCourse, newStudent);
+                    JOptionPane.showMessageDialog(frame, "The student is added successfully");
+                    break;
+                case "removeStudent":
+                    Course removeStudentCourse = courseMethod(currentTeacher);
+                    Student removeStudent = studentMethod();
+                    currentTeacher.removeStudent(removeStudentCourse, removeStudent);
+                    JOptionPane.showMessageDialog(frame, "The student is removed successfully");
+                    break;
+                case "deleteAssignment":
+                    Course deleteAssignmentCourse = courseMethod(currentTeacher);
+                    Assignment deleteAssignment = assignmentMethod();
+                    currentTeacher.deleteAssignment(deleteAssignmentCourse, deleteAssignment);
+                    JOptionPane.showMessageDialog(frame, "The assignment is removed successfully");
+                    break;
+                case "assignGrade":
+                    Course gradeCourse = courseMethod(currentTeacher);
+                    Assignment gradeAssignment = assignmentMethod();
+                    Student gradeStudent = studentMethod();
+                    double grade = Double.parseDouble(JOptionPane.showInputDialog("Please enter student's grade:"));
+                    currentTeacher.assignGrade(gradeCourse, gradeStudent, grade);
+                    JOptionPane.showMessageDialog(frame, "The grade is assigned to a student successfully");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(frame, "Your request is not on the list");
+                    break;
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input! Please try again.", "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
-    public static Teacher teacherMethod(Scanner scanner) {
-        System.out.println("Please enter your first name and last name");
-        String firstName = scanner.nextLine();
-        String lastName = scanner.nextLine();
+
+    private static void handleStudentAction(String action) {
+        try {
+            switch (action) {
+                case "addCourse":
+                    Teacher addCourseTeacher = teacherMethod();
+                    Course addCourse = courseMethod(addCourseTeacher);
+                    currentStudent.addCourse(addCourse);
+                    JOptionPane.showMessageDialog(frame, "The course is added successfully");
+                    break;
+                case "removeCourse":
+                    Teacher removeCourseTeacher = teacherMethod();
+                    Course removeCourse = courseMethod(removeCourseTeacher);
+                    currentStudent.removeCourse(removeCourse);
+                    JOptionPane.showMessageDialog(frame, "The course is removed successfully");
+                    break;
+                case "getTotalUnits":
+                    JOptionPane.showMessageDialog(frame, "Total Units: " + currentStudent.getTotalUnits());
+                    break;
+                case "getOverallGPA":
+                    JOptionPane.showMessageDialog(frame, "Overall GPA: " + currentStudent.getOverallGPA());
+                    break;
+                case "getCurrentTermGPA":
+                    JOptionPane.showMessageDialog(frame, "Current Term GPA: " + currentStudent.getCurrentTermGPA());
+                    break;
+                case "getGradeForTheCourse":
+                    Teacher gradeCourseTeacher = teacherMethod();
+                    Course gradeCourse = courseMethod(gradeCourseTeacher);
+                    JOptionPane.showMessageDialog(frame, "Grade for the course: " + currentStudent.getGradeForTheCourse(gradeCourse));
+                    break;
+                case "printEnrolledCourses":
+                    currentStudent.printEnrolledCourses();
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(frame, "Your request is not on the list");
+                    break;
+            }
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input! Please try again.", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+    private static Teacher teacherMethod() {
+        String firstName = JOptionPane.showInputDialog("Please enter your first name:");
+        String lastName = JOptionPane.showInputDialog("Please enter your last name:");
         return new Teacher(firstName, lastName);
     }
-    public static Course courseMethod(Teacher teacher, Scanner scanner) {
-        System.out.println("please enter course's name, number of units and exam date in yyyy-MM-dd format");
-        String name = scanner.nextLine();
-        int units = scanner.nextInt();
-        scanner.nextLine();
-        String examDate = scanner.nextLine();
+
+    private static Course courseMethod(Teacher teacher) {
+        String name = JOptionPane.showInputDialog("Please enter course's name:");
+        int units = Integer.parseInt(JOptionPane.showInputDialog("Please enter number of units:"));
+        String examDate = JOptionPane.showInputDialog("Please enter exam date in yyyy-MM-dd format:");
         return new Course(name, teacher, units, examDate);
     }
-    public static Assignment assignmentMethod(Scanner scanner) {
-        System.out.println("Please enter assignment's name, deadline in yyyy-MM-dd format and type");
-        String name = scanner.nextLine();
-        String deadLine = scanner.nextLine();
-        TypeAssignment typeAssignment = TypeAssignment.valueOf(scanner.nextLine());
-        return new Assignment(name, deadLine, typeAssignment);
+
+    private static Assignment assignmentMethod() {
+        String name = JOptionPane.showInputDialog("Please enter assignment's name:");
+        String deadline = JOptionPane.showInputDialog("Please enter deadline in yyyy-MM-dd format:");
+        JRadioButton projectButton = new JRadioButton("PROJECT");
+        JRadioButton homeworkButton = new JRadioButton("HOMEWORK");
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(projectButton);
+        buttonGroup.add(homeworkButton);
+        JPanel jPanel = new JPanel();
+        jPanel.add(projectButton);
+        jPanel.add(homeworkButton);
+        JOptionPane.showMessageDialog(null, jPanel, "Assignment Type", JOptionPane.PLAIN_MESSAGE);
+        TypeAssignment type;
+        if (projectButton.isSelected()) {
+            type = TypeAssignment.PROJECT;
+        } else {
+            type = TypeAssignment.HOMEWORK;
+        }
+        return new Assignment(name, deadline, type);
     }
-    public static Student studentMethod(Scanner scanner) {
-        System.out.println("Please enter student's first name, last name, id and current semester");
-        String firstName = scanner.nextLine();
-        String lastName = scanner.nextLine();
-        int id = scanner.nextInt();
-        int currentSemester = scanner.nextInt();
+
+    private static Student studentMethod() {
+        String firstName = JOptionPane.showInputDialog("Please enter student's first name:");
+        String lastName = JOptionPane.showInputDialog("Please enter student's last name:");
+        int id = Integer.parseInt(JOptionPane.showInputDialog("Please enter student's ID:"));
+        int currentSemester = Integer.parseInt(JOptionPane.showInputDialog("Please enter student's current semester:"));
         return new Student(firstName, lastName, id, currentSemester);
     }
 }
+
+
+
 
 

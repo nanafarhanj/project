@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_4/login.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  SignupPageState createState() => SignupPageState();
+}
+
+class SignupPageState extends State<SignupPage> {
+  bool isObscure = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,10 +95,19 @@ class SignupPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text("Already have an account?"),
-                  Text(
-                    " Login",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                  )
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Text(
+                      " Login",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
+                  ),
                 ],
               )
             ],
@@ -100,34 +116,53 @@ class SignupPage extends StatelessWidget {
       ),
     );
   }
-}
 
 // we will be creating a widget for text field
-Widget inputFile({label, obscureText = false}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
-      ),
-      SizedBox(
-        height: 5,
-      ),
-      TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 32, 137, 148)),
+  Widget inputFile({label, obscureText = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                obscureText: obscureText && isObscure,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 32, 137, 148)),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 45, 90, 110)),
+                  ),
+                ),
+              ),
             ),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color.fromARGB(255, 45, 90, 110)))),
-      ),
-      SizedBox(
-        height: 10,
-      )
-    ],
-  );
+            IconButton(
+              icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
+              onPressed: () {
+                setState(() {
+                  isObscure = !isObscure;
+                });
+              },
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        )
+      ],
+    );
+  }
 }

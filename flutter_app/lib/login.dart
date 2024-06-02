@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_4/signup.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends State<LoginPage> {
+  bool isObscure = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,13 +99,21 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text("Don't have an account?"),
-                    Text(
+                    GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupPage()),
+                      );
+                    },
+                    child: Text(
                       " Sign up",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
                       ),
                     )
+                    ),
                   ],
                 ),
                 Container(
@@ -117,7 +132,6 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-}
 
 // we will be creating a widget for text field
 Widget inputFile({label, obscureText = false}) {
@@ -132,20 +146,40 @@ Widget inputFile({label, obscureText = false}) {
       SizedBox(
         height: 5,
       ),
-      TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 90, 149, 180)),
+       Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                obscureText: obscureText && isObscure,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 90, 150, 180)),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 90, 185, 200)),
+                  ),
+                ),
+              ),
             ),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color.fromARGB(255, 89, 185, 202)))),
-      ),
+            IconButton(
+              icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
+              onPressed: () {
+                setState(() {
+                  isObscure = !isObscure;
+                });
+              },
+            ),
+          ],
+        ),
       SizedBox(
         height: 10,
       )
     ],
 
   );
+}
 }

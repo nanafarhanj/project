@@ -65,6 +65,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     },
+                    color: Color.fromARGB(255, 55, 150, 180),
                     // defining the shape
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.black),
@@ -86,7 +87,7 @@ class HomePage extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => SignupPage()));
                     },
-                    color: Color(0xff0095FF),
+                    color: Color.fromARGB(255, 52, 140, 174),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
                     child: Text(

@@ -19,7 +19,7 @@ class SignupPageState extends State<SignupPage> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); //go back to the previous screen
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -75,7 +75,12 @@ class SignupPageState extends State<SignupPage> {
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginPage()));
+                  },
                   color: Color(0xff0095FF),
                   elevation: 0,
                   shape: RoundedRectangleBorder(

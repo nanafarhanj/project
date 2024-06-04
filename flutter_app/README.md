@@ -1,6 +1,7 @@
 # flutter_application_4
 
 A new Flutter project.
+a university app project.
 
 ## Getting Started
 

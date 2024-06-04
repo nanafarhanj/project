@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_4/signup.dart';
+import 'package:flutter_application_4/userInformation.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); //go back to the previous screen
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -78,7 +79,12 @@ class LoginPageState extends State<LoginPage> {
                     child: MaterialButton(
                       minWidth: double.infinity,
                       height: 60,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => userInformation()));
+                      },
                       color: Color(0xff0095FF),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -100,20 +106,20 @@ class LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Text("Don't have an account?"),
                     GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignupPage()),
-                      );
-                    },
-                    child: Text(
-                      " Sign up",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                      ),
-                    )
-                    ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupPage()),
+                          );
+                        },
+                        child: Text(
+                          " Sign up",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        )),
                   ],
                 ),
                 Container(
@@ -134,19 +140,19 @@ class LoginPageState extends State<LoginPage> {
   }
 
 // we will be creating a widget for text field
-Widget inputFile({label, obscureText = false}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
-      ),
-      SizedBox(
-        height: 5,
-      ),
-       Row(
+  Widget inputFile({label, obscureText = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
           children: <Widget>[
             Expanded(
               child: TextField(
@@ -175,11 +181,10 @@ Widget inputFile({label, obscureText = false}) {
             ),
           ],
         ),
-      SizedBox(
-        height: 10,
-      )
-    ],
-
-  );
-}
+        SizedBox(
+          height: 10,
+        )
+      ],
+    );
+  }
 }

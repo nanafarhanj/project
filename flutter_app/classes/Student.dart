@@ -1,5 +1,5 @@
 
-import 'package:flutter_application_4/Course.dart';
+import 'package:flutter_application_4/classes/Course.dart';
 
 class Student {
   String firstName;

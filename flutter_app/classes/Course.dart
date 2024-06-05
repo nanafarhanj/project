@@ -1,7 +1,6 @@
-
-import 'package:flutter_application_4/Assignment.dart';
-import 'package:flutter_application_4/Student.dart';
-import 'package:flutter_application_4/Teacher.dart';
+import 'package:flutter_application_4/classes/Assignment.dart';
+import 'package:flutter_application_4/classes/Student.dart';
+import 'package:flutter_application_4/classes/Teacher.dart';
 
 class Course {
   Teacher teacher;

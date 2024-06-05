@@ -1,0 +1,4 @@
+enum TypeAssignment {
+     HOMEWORK,
+    PROJECT
+}

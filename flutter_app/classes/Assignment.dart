@@ -1,4 +1,4 @@
-import 'package:flutter_application_4/TypeAssignment.dart';
+import 'package:flutter_application_4/classed/TypeAssignment.dart';
 
 class Assignment {
   String name;

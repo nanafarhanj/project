@@ -59,7 +59,7 @@ class UpdateProfile extends StatelessWidget {
                     TextFormField(
                       decoration: InputDecoration(
                           label: Text(
-                            "Full Name",
+                            "Username",
                           ),
                           prefixIcon: Icon(LineAwesomeIcons.user)),
                     ),

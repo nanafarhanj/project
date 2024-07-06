@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_4/signup.dart';
-import 'package:flutter_application_4/userInformation.dart';
+import 'package:flutter_application_4/HomePage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,7 +16,6 @@ class LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        // brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
@@ -59,7 +58,7 @@ class LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: <Widget>[
-                      inputFile(label: "Username"),
+                      inputFile(label: "username"),
                       inputFile(label: "Password", obscureText: true)
                     ],
                   ),
@@ -83,7 +82,7 @@ class LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => userInformation()));
+                              builder: (context) => HomePage()));
                       },
                       color: Color(0xff0095FF),
                       elevation: 0,

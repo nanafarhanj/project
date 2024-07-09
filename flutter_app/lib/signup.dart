@@ -1,5 +1,6 @@
+// import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_4/login.dart';
+import 'login.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -7,7 +8,23 @@ class SignupPage extends StatefulWidget {
 }
 
 class SignupPageState extends State<SignupPage> {
-  bool isObscure = false;
+  bool isObscure = true;
+  // final usernameController = TextEditingController();
+  // final idController = TextEditingController();
+  // final emailController = TextEditingController();
+  // final passwordController = TextEditingController();
+  // final confirmPasswordController = TextEditingController();
+
+  // void signup(String username, String password) async {
+  //   Socket socket = await Socket.connect('192.168.1.37', 12345);
+  //   socket.write('signup-$username-$password\n');
+  //   socket.flush();
+  //   socket.listen((data) {
+  //     print(String.fromCharCodes(data).trim());
+  //     socket.destroy();
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,11 +32,10 @@ class SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        // brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context); //go back to the previous screen
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -45,42 +61,50 @@ class SignupPageState extends State<SignupPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20),
                   Text(
-                    "Create an account, It's free ",
+                    "Create an account, It's free",
                     style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  )
+                  ),
                 ],
               ),
               Column(
                 children: <Widget>[
                   inputFile(label: "Username"),
+                  // controller: usernameController),
                   inputFile(label: "Id"),
+                  //  controller: idController),
                   inputFile(label: "Email"),
-                  inputFile(label: "Password", obscureText: true),
-                  inputFile(label: "Confirm Password ", obscureText: true),
+                  //  controller: emailController),
+                  inputFile(
+                      label: "Password",
+                      obscureText: true,
+                  ),
+                      // controller: passwordController),
+                  inputFile(
+                      label: "Confirm Password",
+                      obscureText: true,),
+                      // controller: confirmPasswordController),
                 ],
               ),
               Container(
                 padding: EdgeInsets.only(top: 3, left: 3),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border(
-                      bottom: BorderSide(color: Colors.black),
-                      top: BorderSide(color: Colors.black),
-                      left: BorderSide(color: Colors.black),
-                      right: BorderSide(color: Colors.black),
-                    )),
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: Colors.black),
+                ),
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () {
-                    Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage()));
+                    // if (passwordController.text ==
+                    //     confirmPasswordController.text) {
+                    //   signup(usernameController.text, passwordController.text);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    // } else {
+                    //   // show error message
+                    // }
                   },
                   color: Color(0xff0095FF),
                   elevation: 0,
@@ -123,8 +147,7 @@ class SignupPageState extends State<SignupPage> {
     );
   }
 
-// we will be creating a widget for text field
-  Widget inputFile({label, obscureText = false}) {
+  Widget inputFile({label, obscureText = false, controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -140,6 +163,7 @@ class SignupPageState extends State<SignupPage> {
           children: <Widget>[
             Expanded(
               child: TextField(
+                controller: controller,
                 obscureText: obscureText && isObscure,
                 decoration: InputDecoration(
                   contentPadding:
@@ -155,19 +179,18 @@ class SignupPageState extends State<SignupPage> {
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  isObscure = !isObscure;
-                });
-              },
-            ),
+            if (obscureText)
+              IconButton(
+                icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    isObscure = !isObscure;
+                  });
+                },
+              ),
           ],
         ),
-        SizedBox(
-          height: 10,
-        )
+        SizedBox(height: 10),
       ],
     );
   }

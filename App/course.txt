@@ -1,0 +1,5 @@
+AP~Dr. Vahidid~3~6~Zahra Rasti
+DLC~Dr. Salari~3~5~Bardia Amiri
+Discrete Mathematics~Dr. Safaee3~4~Mobina Moradi
+Physics~Dr. Zibaee~3~3~Parimah Poori
+Physics Lab~Dr. Nikoo~1~4~Ali Alii

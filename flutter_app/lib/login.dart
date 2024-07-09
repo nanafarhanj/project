@@ -1,6 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'HomePage.dart';
 import 'package:flutter_application_4/signup.dart';
-import 'package:flutter_application_4/HomePage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,7 +9,60 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  TextEditingController studentID = TextEditingController();
+  TextEditingController password = TextEditingController();
+  bool userIDChecker = true, passwordChecker = true;
   bool isObscure = false;
+  String response = '';
+  // bool isObscure = true;
+  // final usernameController = TextEditingController();
+  // final passwordController = TextEditingController();
+
+  // void login(String username, String password) async {
+  //   Socket socket = await Socket.connect('192.168.1.37', 8080);
+  //   socket.write('login-$username-$password\n');
+  //   socket.flush();
+  //   socket.listen((data) {
+  //     print(String.fromCharCodes(data).trim());
+  //     if (String.fromCharCodes(data).trim() == 'Login successful') {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => HomePage()),
+  //       );
+  //     } else {
+  //       // show error message
+  //     }
+
+  //     socket.destroy();
+  //   });
+  // }
+
+  Future<String> logIn() async {
+    await Socket.connect("192.168.137.1", 8080).then((serverSocket) {
+      serverSocket
+          .write('GET: logInChecker~${studentID.text}~${password.text}\u0000');
+      serverSocket.flush();
+      serverSocket.listen((socketResponse) {
+        setState(() {
+          response = String.fromCharCodes(socketResponse);
+        });
+      });
+    });
+    print("----------   server response is:  { $response }");
+
+    if (response == "401") {
+      userIDChecker = true;
+      passwordChecker = false;
+    } else if (response == "404") {
+      userIDChecker = false;
+      passwordChecker = false;
+    } else if (response == "200") {
+      userIDChecker = true;
+      passwordChecker = true;
+    }
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +73,7 @@ class LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context); //go back to the previous screen
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -58,8 +112,11 @@ class LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: <Widget>[
-                      inputFile(label: "username"),
-                      inputFile(label: "Password", obscureText: true)
+                      inputFile(label: "Username", controller: studentID),
+                      inputFile(
+                          label: "Password",
+                          obscureText: true,
+                          controller: password),
                     ],
                   ),
                 ),
@@ -69,20 +126,20 @@ class LoginPageState extends State<LoginPage> {
                     padding: EdgeInsets.only(top: 3, left: 3),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        border: Border(
-                          bottom: BorderSide(color: Colors.black),
-                          top: BorderSide(color: Colors.black),
-                          left: BorderSide(color: Colors.black),
-                          right: BorderSide(color: Colors.black),
-                        )),
+                        border: Border.all(color: Colors.black)),
                     child: MaterialButton(
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage()));
+                        logIn();
+                        if (userIDChecker && passwordChecker) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        }
                       },
                       color: Color(0xff0095FF),
                       elevation: 0,
@@ -105,20 +162,20 @@ class LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Text("Don't have an account?"),
                     GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupPage()),
-                          );
-                        },
-                        child: Text(
-                          " Sign up",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                          ),
-                        )),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignupPage()),
+                        );
+                      },
+                      child: Text(
+                        " Sign up",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Container(
@@ -138,8 +195,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-// we will be creating a widget for text field
-  Widget inputFile({label, obscureText = false}) {
+  Widget inputFile({label, obscureText = false, controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -155,6 +211,7 @@ class LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Expanded(
               child: TextField(
+                controller: controller,
                 obscureText: obscureText && isObscure,
                 decoration: InputDecoration(
                   contentPadding:
@@ -170,19 +227,18 @@ class LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  isObscure = !isObscure;
-                });
-              },
-            ),
+            if (obscureText)
+              IconButton(
+                icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    isObscure = !isObscure;
+                  });
+                },
+              ),
           ],
         ),
-        SizedBox(
-          height: 10,
-        )
+        SizedBox(height: 10),
       ],
     );
   }

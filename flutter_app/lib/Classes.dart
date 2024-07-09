@@ -9,6 +9,23 @@ class ClassesPage extends StatefulWidget {
 class _ClassesPageState extends State<ClassesPage> {
   List<Class> classes = [];
 
+  @override
+  void initState() {
+    super.initState();
+    classes.add(
+      Class(
+        courseNumber: '1',
+        courseName: 'Advanced Programming',
+        instructor: 'Dr. Vahidi',
+        units: 3,
+        remainingAssignments: 3,
+        topStudent: 'Zahra',
+        classTime: DateTime(2024, 1, 1, 13, 30),
+        duration: Duration(minutes: 90),
+      ),
+    );
+  }
+
   void _addClass(Class newClass) {
     setState(() {
       classes.add(newClass);
@@ -83,7 +100,8 @@ class _ClassesPageState extends State<ClassesPage> {
                 ),
                 TextField(
                   keyboardType: TextInputType.number,
-                  onChanged: (value) => duration = Duration(minutes: int.parse(value)),
+                  onChanged: (value) =>
+                      duration = Duration(minutes: int.parse(value)),
                   decoration: InputDecoration(labelText: 'Duration (minutes)'),
                 ),
               ],
@@ -135,13 +153,15 @@ class _ClassesPageState extends State<ClassesPage> {
                 return Card(
                   color: Colors.primaries[index % Colors.primaries.length],
                   child: ListTile(
-                    title: Text('${classItem.courseName} (${classItem.courseNumber})'),
+                    title: Text(
+                        '${classItem.courseName} (${classItem.courseNumber})'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Instructor: ${classItem.instructor}'),
-                        Text('units: ${classItem.units}'),
-                        Text('Remaining Assignments: ${classItem.remainingAssignments}'),
+                        Text('Units: ${classItem.units}'),
+                        Text(
+                            'Remaining Assignments: ${classItem.remainingAssignments}'),
                         Text('Top Student: ${classItem.topStudent}'),
                       ],
                     ),
@@ -163,7 +183,8 @@ class _ClassesPageState extends State<ClassesPage> {
               ),
               tasks: classes.map((classItem) {
                 return TimePlannerTask(
-                  color: Colors.primaries[classes.indexOf(classItem) % Colors.primaries.length],
+                  color: Colors.primaries[
+                      classes.indexOf(classItem) % Colors.primaries.length],
                   dateTime: TimePlannerDateTime(
                     day: classItem.classTime.weekday,
                     hour: classItem.classTime.hour,
@@ -184,6 +205,7 @@ class _ClassesPageState extends State<ClassesPage> {
     );
   }
 }
+
 class Class {
   final String courseNumber;
   final String courseName;
@@ -205,3 +227,9 @@ class Class {
     required this.duration,
   });
 }
+
+
+
+
+
+

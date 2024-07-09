@@ -1,3 +1,353 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+
+class TasksPage extends StatefulWidget {
+  @override
+  _TasksPageState createState() => _TasksPageState();
+}
+
+class _TasksPageState extends State<TasksPage> {
+
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1990),
+      lastDate: DateTime(2030),
+    ).then((value) {
+      setState(() {
+      });
+    });
+  }
+
+  List<Map<String, dynamic>> completedTasks = [];
+
+
+  List<Map<String, dynamic>> tasks = [
+    {
+      'title': 'Choosing Units',
+      'dateTime': DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 16, 0),
+      'isDone': false
+    },
+    {
+      'title': 'Complete Physics Assignment',
+      'dateTime': DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18, 0),
+      'isDone': false
+    },
+  ];
+ 
+  void _addTask(String title, DateTime dateTime) {
+    setState(() {
+      tasks.add({'title': title, 'dateTime': dateTime, 'isDone': false});
+    });
+  }
+
+  void _markAsDone(int index) {
+    setState(() {
+      Map<String, dynamic> task = tasks.removeAt(index);
+      task['isDone'] = true;
+      completedTasks.add(task);
+    });
+  }
+
+  void _deleteTask(int index) {
+    setState(() {
+      tasks.removeAt(index);
+    });
+  }
+
+  void _showAddTaskDialog() {
+    String title = '';
+    DateTime dateTime = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add New Task'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'Task Title'),
+                onChanged: (value) {
+                  title = value;
+                },
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                child: Text('Select Date and Time'),
+                onPressed: _showDatePicker,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Add'),
+              onPressed: () {
+                if (title.isNotEmpty) {
+                  _addTask(title, dateTime);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Today\'s Tasks'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(task['title']),
+                      subtitle: Text(DateFormat('yyyy-MM-dd – kk:mm').format(task['dateTime'])),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () => _markAsDone(index),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => _deleteTask(index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Divider(),
+            Text('Completed Tasks'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: completedTasks.length,
+                itemBuilder: (context, index) {
+                  final task = completedTasks[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(task['title']),
+                      subtitle: Text(DateFormat('yyyy-MM-dd – kk:mm').format(task['dateTime'])),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: _showAddTaskDialog,
+      ),
+    );
+  }
+}
+
+
+
+
+/**import 'package:flutter/material.dart';
+
+
+class TasksPage extends StatefulWidget {
+  @override
+  _TasksPageState createState() => _TasksPageState();
+}
+
+class _TasksPageState extends State<TasksPage> {
+  DateTime _dateTime = DateTime.now();
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1990),
+      lastDate: DateTime(2030),
+    ).then((value) {
+      setState(() {
+        _dateTime = value!;
+      });
+    });
+  }
+
+  List<Map<String, dynamic>> tasks = [];
+  List<Map<String, dynamic>> completedTasks = [];
+
+  void _addTask(String title, DateTime dateTime) {
+    setState(() {
+      tasks.add({'title': title, 'dateTime': dateTime, 'isDone': false});
+    });
+  }
+
+  void _markAsDone(int index) {
+    setState(() {
+      Map<String, dynamic> task = tasks.removeAt(index);
+      task['isDone'] = true;
+      completedTasks.add(task);
+    });
+  }
+
+  void _deleteTask(int index) {
+    setState(() {
+      tasks.removeAt(index);
+    });
+  }
+
+  void _showAddTaskDialog() {
+    String title = '';
+    DateTime dateTime = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add New Task'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'Task Title'),
+                onChanged: (value) {
+                  title = value;
+                },
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                child: Text('Select Date and Time'),
+                onPressed: _showDatePicker,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Add'),
+              onPressed: () {
+                if (title.isNotEmpty) {
+                  _addTask(title, dateTime);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Today\'s Tasks'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(task['title']),
+                      subtitle: Text(_dateTime.toString(),
+                          style: TextStyle(fontSize: 20)),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () => _markAsDone(index),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => _deleteTask(index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Divider(),
+            Text('Completed Tasks'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: completedTasks.length,
+                itemBuilder: (context, index) {
+                  final task = completedTasks[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(task['title']),
+                      subtitle: Text(_dateTime.toString(),
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: _showAddTaskDialog,
+      ),
+    );
+  }
+}**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -201,181 +551,3 @@ class _TasksPageState extends State<TasksPage> {
   }
 }
 **/
-
-
-import 'package:flutter/material.dart';
-
-
-class TasksPage extends StatefulWidget {
-  @override
-  _TasksPageState createState() => _TasksPageState();
-}
-
-class _TasksPageState extends State<TasksPage> {
-  DateTime _dateTime = DateTime.now();
-
-  void _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1990),
-      lastDate: DateTime(2030),
-    ).then((value) {
-      setState(() {
-        _dateTime = value!;
-      });
-    });
-  }
-
-  List<Map<String, dynamic>> tasks = [];
-  List<Map<String, dynamic>> completedTasks = [];
-
-  void _addTask(String title, DateTime dateTime) {
-    setState(() {
-      tasks.add({'title': title, 'dateTime': dateTime, 'isDone': false});
-    });
-  }
-
-  void _markAsDone(int index) {
-    setState(() {
-      Map<String, dynamic> task = tasks.removeAt(index);
-      task['isDone'] = true;
-      completedTasks.add(task);
-    });
-  }
-
-  void _deleteTask(int index) {
-    setState(() {
-      tasks.removeAt(index);
-    });
-  }
-
-  void _showAddTaskDialog() {
-    String title = '';
-    DateTime dateTime = DateTime.now();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add New Task'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(labelText: 'Task Title'),
-                onChanged: (value) {
-                  title = value;
-                },
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                child: Text('Select Date and Time'),
-                onPressed: _showDatePicker,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Add'),
-              onPressed: () {
-                if (title.isNotEmpty) {
-                  _addTask(title, dateTime);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Today\'s Tasks'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final task = tasks[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(task['title']),
-                      subtitle: Text(_dateTime.toString(),
-                          style: TextStyle(fontSize: 20)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.check),
-                            onPressed: () => _markAsDone(index),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => _deleteTask(index),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Divider(),
-            Text('Completed Tasks'),
-            Expanded(
-              child: ListView.builder(
-                itemCount: completedTasks.length,
-                itemBuilder: (context, index) {
-                  final task = completedTasks[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(task['title']),
-                      subtitle: Text(_dateTime.toString(),
-                          style: TextStyle(fontSize: 20)),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: _showAddTaskDialog,
-      ),
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

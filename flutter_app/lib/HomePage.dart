@@ -33,6 +33,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 55, 123, 241),
         title: Text('Home'),
       ),
       body: _pages[selectedIndex],
@@ -63,8 +64,6 @@ class HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
         ],
-        fixedColor: Colors.deepPurpleAccent,
-        backgroundColor: Colors.deepPurpleAccent,
         currentIndex: selectedIndex,
         selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
@@ -95,6 +94,7 @@ class SummarySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.pinkAccent,
       margin: EdgeInsets.all(10.0),
       child: Padding(
         padding: EdgeInsets.all(10.0),
@@ -128,6 +128,7 @@ class TodayTasksSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.orange,
       margin: EdgeInsets.all(10.0),
       child: Padding(
         padding: EdgeInsets.all(10.0),
@@ -144,15 +145,16 @@ class TodayTasksSection extends StatelessWidget {
                 title: Text(task),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
+
                   children: [
                     IconButton(
                         onPressed: () {
-                          // Handle task completion
+                          
                         },
                         icon: const Icon(LineAwesomeIcons.check_circle_solid)),
                     IconButton(
                         onPressed: () {
-                          // Handle task deletion
+                          
                         },
                         icon: Icon(LineAwesomeIcons.trash_alt_solid)),
                   ],
@@ -169,12 +171,14 @@ class TodayTasksSection extends StatelessWidget {
 class CompletedAssignmentsSection extends StatelessWidget {
   final List<String> completedAssignments = [
     'Math Assignment - Due Date: 2024-07-10',
-    'Physics Project - Due Date: 2024-07-15',
+    'AP Project - Due Date: 2024-07-15',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.black,
+      color: Colors.green[100],
       margin: EdgeInsets.all(10.0),
       child: Padding(
         padding: EdgeInsets.all(10.0),
